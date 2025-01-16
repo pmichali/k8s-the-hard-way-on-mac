@@ -13,12 +13,13 @@ echo "Extracted etcd binaries"
 }
 echo "Configured etcd server"
 
-cp services/etcd /etc/init.d/
-cp defaults/etcd /etc/default/
+mv etcd.service /etc/systemd/system/
+{
+  systemctl daemon-reload
+  systemctl enable etcd
+  systemctl start etcd
+}
 
-update-rc.d etcd defaults
-service etcd start
-service --status-all
 
 etcdctl member list
 
