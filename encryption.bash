@@ -1,3 +1,5 @@
+cd ~/kubernetes-the-hard-way
+
 export ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
 echo "Created encryption key"
 
