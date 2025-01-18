@@ -19,8 +19,7 @@ mv etcd.service /etc/systemd/system/
   systemctl enable etcd
   systemctl start etcd
 }
-
-
-etcdctl member list
-
 echo "Started etcd service"
+
+echo "Showing etcd member list"
+etcdctl member list

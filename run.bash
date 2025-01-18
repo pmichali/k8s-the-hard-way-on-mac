@@ -3,13 +3,13 @@ more_hosts=""
 while read IP FQDN HOST SUBNET; do
     if [ "${HOST}" == "$1" ]; then
 	my_ip="${IP}"
-    else
-	more_hosts="${more_hosts} --add-host ${HOST}:${IP} --add-host ${HOST}.kubernetes.local:${IP}"
     fi
+    # Must have FQDN first
+    more_hosts="${more_hosts} --add-host ${HOST}.kubernetes.local;${HOST}:${IP}"
 done < machines.txt
 
-docker run -d --rm -h $1 --domainname kubernetes.local --name $1 --ip ${my_ip} ${more_hosts} --net k8snet ${DOCKER_ID}/node:v0.1.0
-docker exec $1 mv .ssh/$1_id_rsa .ssh/id_rsa
-docker exec  $1 mv .ssh/$1_id_rsa.pub .ssh/id_rsa.pub
+podman run -d --rm --privileged -h $1 --name $1 --ip ${my_ip} ${more_hosts} --net k8snet localhost/${DOCKER_ID}/node:v0.1.0
+podman exec $1 mv .ssh/$1_id_rsa .ssh/id_rsa
+podman exec  $1 mv .ssh/$1_id_rsa.pub .ssh/id_rsa.pub
 
 
