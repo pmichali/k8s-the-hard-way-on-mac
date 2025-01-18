@@ -46,7 +46,5 @@ the version using the command:
 
 curl -k --cacert ca.crt https://server.kubernetes.local:6443/version
 
-
-
-
-9) On jumpbox, do contents of bootstrap-workers.bash.
+9) Bootstrapping the Kubernetes Worker Nodes
+From the jumpbox, invoke push-worker-settings.bash.
