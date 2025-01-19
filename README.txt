@@ -48,3 +48,9 @@ curl -k --cacert ca.crt https://server.kubernetes.local:6443/version
 
 9) Bootstrapping the Kubernetes Worker Nodes
 From the jumpbox, invoke push-worker-settings.bash.
+Go back(exit) to jumpbox and check nodes:
+ssh server kubectl get nodes -o wide --kubeconfig admin.kubeconfig
+
+10) Configuring kubectl for Remote Access
+From the jumpbox, invoke remote-access.bash.
+

@@ -16,3 +16,7 @@ podman cp bootstrap-controllers.bash server:/root/
 podman cp push-worker-settings.bash jumpbox:/root/
 podman cp bootstrap-workers.bash node-0:/root/
 podman cp bootstrap-workers.bash node-1:/root/
+
+podman cp remote-access.bash jumpbox:/root/
+
+podman cp set-routes.bash jumpbox:/root/

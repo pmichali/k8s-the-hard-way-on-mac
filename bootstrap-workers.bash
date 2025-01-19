@@ -4,11 +4,14 @@
 }
 echo "Installed OS dependencies"
 
-swapon --show
-swapoff -a    <--- does not work.
-
-# Will try with swap on. If issue, run containers with --memory and --memory-swap set to the same value.
-# Concern will be over Mac memory, as they suggest 2GB for nodes.
+if [ -z `swapon --show` ]; then
+    echo "Swap is OFF, as desired"
+else
+    # NOTE: With podman, may be able to run container with --memory and --memory-swap with same value
+    echo "Swap is on - run the following to disable, and then consult OS doc to disable permanently:"
+    echo "    swapoff -a"
+    exit 1
+fi
 
 mkdir -p \
   /etc/cni/net.d \
@@ -37,34 +40,26 @@ echo "Created bridge config"
 {
   mkdir -p /etc/containerd/
   mv containerd-config.toml /etc/containerd/config.toml
+  sed -i '/ExecStartPre=.*modprobe overlay/d' containerd.service
   mv containerd.service /etc/systemd/system/
-  cp services/containerd /etc/init.d/
-  cp defaults/containerd /etc/default/
 }
 echo "Configured containerd"
 
 {
   mv kubelet-config.yaml /var/lib/kubelet/
   mv kubelet.service /etc/systemd/system/
-  cp services/kubelet /etc/init.d/
-  cp defaults/kubelet /etc/default/
 }
 echo "Configured kubelet"
 
 {
   mv kube-proxy-config.yaml /var/lib/kube-proxy/
   mv kube-proxy.service /etc/systemd/system/
-  cp services/kube-proxy /etc/init.d/
-  cp defaults/kube-proxy /etc/default/
 }
 echo "Configured kube-proxy"
 
-update-rc.d containerd defaults
-update-rc.d kubelet defaults
-update-rc.d kube-proxy defaults
-
-service containerd start
-service kubelet start
-service kube-proxy start
-
-service --status-all
+{
+  systemctl daemon-reload
+  systemctl enable containerd kubelet kube-proxy
+  systemctl start containerd kubelet kube-proxy
+}
+echo "Started worker services"

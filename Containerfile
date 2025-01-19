@@ -1,7 +1,7 @@
 FROM debian:bookworm-slim
 
 # Install tools and set timezone
-RUN apt-get update -y && apt-get install -y tzdata emacs wget curl openssl git net-tools iputils-ping dnsutils sudo openssh-server ripgrep gettext-base kmod
+RUN apt-get update -y && apt-get install -y tzdata emacs wget curl openssl git net-tools iputils-ping dnsutils sudo openssh-server ripgrep gettext-base kmod iproute2
 ENV TZ=US/Eastern \
     DEBIAN_FRONTEND=noninteractive \
     MORE=-e \
